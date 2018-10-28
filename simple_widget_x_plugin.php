@@ -8,7 +8,6 @@ Author:       Dan Kirkwood
 Author URI:   
 License:      GPLv3
 License URI:  https://www.gnu.org/licenses/gpl.html
-
 */
 
 $simple_widget_x_id = 0;

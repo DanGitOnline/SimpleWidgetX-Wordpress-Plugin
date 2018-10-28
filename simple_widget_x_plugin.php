@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*
 Plugin Name:  Simple Widget X
 Plugin URI:   
@@ -12,8 +12,11 @@ License URI:  https://www.gnu.org/licenses/gpl.html
 */
 
 $simple_widget_x_id = 0;
-
 if ( !is_admin() ) { add_action('wp_enqueue_scripts', 'simple_widget_x_scripts'); }
+add_shortcode( 'simple_widget_x',  'simple_widget_x' );
+add_action(  'widgets_init',  'simple_widget_x_register_widget' );
+
+function simple_widget_x_register_widget() { register_widget( 'simple_widget_x_widget' ); }
 
 function simple_widget_x_scripts() {
     //wp_enqueue_style('simple_widget_x_style', plugins_url('/simple_widget_x.css', __FILE__));
@@ -52,37 +55,7 @@ function simple_widget_x($atts = [], $content = null, $tag = '') {
     return $content;
 }
 
-add_shortcode( 'simple_widget_x',  'simple_widget_x' );
-
-function simple_widget_x_register_widget() { register_widget( 'simple_widget_x_widget' ); }
-
-add_action(  'widgets_init',  'simple_widget_x_register_widget' );
-
 class simple_widget_x_widget extends WP_Widget {
-
-	function __construct() {
-		parent::__construct(
-			'simple_widget_x_widget',
-			__('simple widget x widget', 'simple_widget_x_widget_domain'),
-            array( 'description' => __( 'simple widget x widget', 'simple_widget_x_widget_domain' ) )
-		);
-	}
-
-	public function widget( $args, $instance ) {
-		$caption = apply_filters( 'widget_caption', $instance['caption'] );
-        $value = apply_filters( 'widget_value', $instance['value'] );
-        
-        if ( empty($caption) ) $caption = '';
-        if ( empty($value) ) $value = '';
-        
-        $atts = [];
-        $atts['caption'] = $caption;
-        $atts['value'] = $value;
-
-        echo $args['before_widget'];
-        echo simple_widget_x( $atts );
-		echo $args['after_widget'];
-	}
 
 	public function form( $instance ) {
     
@@ -129,5 +102,29 @@ class simple_widget_x_widget extends WP_Widget {
         $instance['value'] = 
             ( ! empty( $new_instance['value'] ) ) ? strip_tags( $new_instance['value'] ) : '';
 		return $instance;
+	}
+
+	public function widget( $args, $instance ) {
+		$caption = apply_filters( 'widget_caption', $instance['caption'] );
+        $value = apply_filters( 'widget_value', $instance['value'] );
+        
+        if ( empty($caption) ) $caption = '';
+        if ( empty($value) ) $value = '';
+        
+        $atts = [];
+        $atts['caption'] = $caption;
+        $atts['value'] = $value;
+
+        echo $args['before_widget'];
+        echo simple_widget_x( $atts );
+		echo $args['after_widget'];
+	}
+
+	function __construct() {
+		parent::__construct(
+			'simple_widget_x_widget',
+			__('simple widget x widget', 'simple_widget_x_widget_domain'),
+            array( 'description' => __( 'simple widget x widget', 'simple_widget_x_widget_domain' ) )
+		);
 	}
 }
